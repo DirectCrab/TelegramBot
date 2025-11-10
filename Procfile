@@ -1,0 +1,1 @@
+web: python bez_osuzhdeniya_bot_v3.py

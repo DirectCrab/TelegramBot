@@ -11,6 +11,10 @@ import logging
 from datetime import datetime
 from typing import Optional
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 from telegram.ext import (
     Application,
     CommandHandler,
@@ -21,12 +25,12 @@ from telegram.ext import (
 )
 
 # ============================================================================
-# НАСТРОЙКИ (ЗАПОЛНИТЕ ПЕРЕД ЗАПУСКОМ)
+# НАСТРОЙКИ (ЗАГРУЖАЮТСЯ ИЗ ПЕРЕМЕННЫХ ОКРУЖЕНИЯ)
 # ============================================================================
 
-TOKEN = "7513863531:AAEzBviqmdjYhi_grtM_dG3h8dUzK-um5EQ"  # Токен от @BotFather
-ADMIN_IDS = [5182831370]  # Ваш исправленный ID
-CHANNEL_ID = "-1003491729747"  # ID канала (формат: -100...)
+TOKEN = os.getenv("BOT_TOKEN")  # Токен от @BotFather
+ADMIN_IDS = [int(id.strip()) for id in os.getenv("ADMIN_IDS", "").split(",") if id.strip()]  # ID админов
+CHANNEL_ID = os.getenv("CHANNEL_ID")  # ID канала (формат: -100...)
 
 # 🔧 АВТОПУБЛИКАЦИЯ: True - публикует автоматически, False - только через /post
 AUTO_POST = True  # Измените на False для ручной модерации
