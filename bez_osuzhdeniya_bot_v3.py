@@ -28,9 +28,32 @@ from telegram.ext import (
 # НАСТРОЙКИ (ЗАГРУЖАЮТСЯ ИЗ ПЕРЕМЕННЫХ ОКРУЖЕНИЯ)
 # ============================================================================
 
-TOKEN = os.getenv("BOT_TOKEN")  # Токен от @BotFather
-ADMIN_IDS = [int(id.strip()) for id in os.getenv("ADMIN_IDS", "").split(",") if id.strip()]  # ID админов
-CHANNEL_ID = os.getenv("CHANNEL_ID")  # ID канала (формат: -100...)
+# Configure logging first
+logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    level=logging.INFO
+)
+logger = logging.getLogger(__name__)
+
+# Load and validate environment variables
+TOKEN = os.getenv("BOT_TOKEN")
+if not TOKEN:
+    raise ValueError("No BOT_TOKEN found in environment variables!")
+
+logger.info("Environment variables loaded:")
+logger.info(f"BOT_TOKEN exists: {bool(TOKEN)}")
+
+# Parse admin IDs with error handling
+admin_ids_str = os.getenv("ADMIN_IDS", "")
+try:
+    ADMIN_IDS = [int(id.strip()) for id in admin_ids_str.split(",") if id.strip()]
+except ValueError as e:
+    logger.error(f"Error parsing ADMIN_IDS: {e}")
+    ADMIN_IDS = []
+
+CHANNEL_ID = os.getenv("CHANNEL_ID")
+if not CHANNEL_ID:
+    raise ValueError("No CHANNEL_ID found in environment variables!")
 
 # 🔧 АВТОПУБЛИКАЦИЯ: True - публикует автоматически, False - только через /post
 AUTO_POST = True  # Измените на False для ручной модерации
@@ -406,12 +429,20 @@ async def error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 def main():
     """Запуск бота"""
-    if TOKEN == "YOUR_BOT_TOKEN_HERE":
-        print("❌ ОШИБКА: Укажите TOKEN в коде!")
-        return
-    
-    # Создаём приложение
-    application = Application.builder().token(TOKEN).build()
+    try:
+        logger.info("Starting bot initialization...")
+        
+        # Print all environment variables (without sensitive data)
+        logger.info("Environment check:")
+        logger.info(f"BOT_TOKEN configured: {'Yes' if TOKEN else 'No'}")
+        logger.info(f"ADMIN_IDS configured: {ADMIN_IDS}")
+        logger.info(f"CHANNEL_ID configured: {CHANNEL_ID}")
+        
+        # Создаём приложение
+        application = Application.builder().token(TOKEN).build()
+    except Exception as e:
+        logger.error(f"Failed to initialize bot: {e}")
+        raise
     
     # Регистрируем обработчики команд
     application.add_handler(CommandHandler("start", start_command))
