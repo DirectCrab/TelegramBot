@@ -152,7 +152,7 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Создаём кнопки
     keyboard = [
         [InlineKeyboardButton("📖 Как отправить историю?", callback_data='how_to')],
-        [InlineKeyboardButton("❓ Частые вопросы", callback_data='faq')]
+        [InlineKeyboardButton("❓ Частые вопросы.", callback_data='faq')]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     
