@@ -140,7 +140,7 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     welcome_text = """
 💖 Привет, подружка!
 
-Я — твоя Анонимная Подружка 💬
+Я - твоя Анонимная Подружка 💬
 
 Здесь можно просто быть собой 🌷
 
