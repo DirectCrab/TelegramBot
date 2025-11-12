@@ -371,9 +371,8 @@ async def handle_story(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 )
                 logger.info(f"История #{story_id} автоматически опубликована в канале")
                 
-                # Создаём кнопку для перехода в канал
+                # Создаём кнопку для отправки ещё одной истории
                 keyboard = [
-                    [InlineKeyboardButton("📢 Посмотреть в канале", url=f"https://t.me/c/{CHANNEL_ID[4:]}/1")],
                     [InlineKeyboardButton("📝 Отправить ещё историю", callback_data='back_to_start')]
                 ]
                 reply_markup = InlineKeyboardMarkup(keyboard)
